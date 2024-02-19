@@ -4,6 +4,8 @@ using UnityEngine.InputSystem;
 public class TPSCameraController : MonoBehaviour
 {
 	[SerializeField] Transform cameraRoot;
+	[SerializeField] Transform target;
+	[SerializeField] float distance;
 	[SerializeField] float mouseSensitivity;
 
 	private Vector2 inputDir;
@@ -19,6 +21,11 @@ public class TPSCameraController : MonoBehaviour
 		Cursor.lockState = CursorLockMode.None;
 	}
 
+	private void Update()
+	{
+		SetTargetPos();
+	}
+
 	private void LateUpdate()  // 모든 진행상황이 끝난 후 후처리
 	{
 		xRotation -= inputDir.y * mouseSensitivity * Time.deltaTime;
@@ -28,6 +35,10 @@ public class TPSCameraController : MonoBehaviour
 		cameraRoot.localRotation = Quaternion.Euler(xRotation, 0, 0);
 	}
 
+	private void SetTargetPos()
+	{
+		target.position = Camera.main.transform.position + Camera.main.transform.forward * distance;
+	}
 	private void OnLook(InputValue value)
 	{
 		inputDir = value.Get<Vector2>();
